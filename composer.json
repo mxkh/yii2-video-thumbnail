@@ -1,0 +1,16 @@
+{
+  "name": "mxkh/yii2-video-thumbnail",
+  "type": "library",
+  "description": "Composer package by Max Khartanovych",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": ">=2.0.6",
+    "mxkh/url-finder": "^0.1.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "mxkh\\VideoThumbnail\\": "src/"
+    }
+  }
+}
