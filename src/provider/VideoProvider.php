@@ -28,7 +28,7 @@ class VideoProvider
     public function identifyProvider($url)
     {
         foreach ($this->providers() as $id => $provider) {
-            $finder = new UrlFinder();
+            $finder = new UrlFinder($id);
             if (!empty($video = $finder->{$id}->subject($url)->one())) {
                 return [
                     'providerId' => $id,
