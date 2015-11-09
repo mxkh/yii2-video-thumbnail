@@ -29,7 +29,8 @@ class VideoProvider
     {
         foreach ($this->providers() as $id => $provider) {
             $finder = new UrlFinder($id);
-            if (!empty($video = $finder->{$id}->subject($url)->one())) {
+            $video = $finder->{$id}->subject($url)->one();
+            if (!empty($video['url'])) {
                 return [
                     'providerId' => $id,
                     'provider' => $provider,
