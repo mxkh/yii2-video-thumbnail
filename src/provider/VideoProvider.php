@@ -10,7 +10,6 @@ namespace mxkh\VideoThumbnail\provider;
 
 
 use mxkh\url\UrlFinder;
-use yii\base\InvalidParamException;
 
 class VideoProvider
 {
@@ -20,6 +19,7 @@ class VideoProvider
 
     public $providerId;
     public $provider;
+    public $videoId;
 
     /**
      * @param $url
@@ -27,14 +27,14 @@ class VideoProvider
      */
     public function identifyProvider($url)
     {
-        if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new InvalidParamException('Param must be a valid url.');
-        }
-
         foreach ($this->providers() as $id => $provider) {
-            $pattern = $this->getProviderPattern($provider);
-            if (preg_match($pattern, $url)) {
-                return $id;
+            $finder = new UrlFinder();
+            if (!empty($video = $finder->{$id}->subject($url)->one())) {
+                return [
+                    'providerId' => $id,
+                    'provider' => $provider,
+                    'videoId' => $video['id'],
+                ];
             }
         }
 
@@ -76,16 +76,14 @@ class VideoProvider
     public function getVideoThumbnail($url)
     {
         // Get video provider id
-        $this->providerId = $this->identifyProvider($url);
+        $identity = $this->identifyProvider($url);
 
-
-        // Get video id
-        $finder = new UrlFinder();
-        $id = $finder->{$this->providerId}->find($url)->one()['id']['0'];
-
+        if (!$identity) {
+            return null;
+        }
         // Get provider instance
-        $this->provider = $this->getProviderInstance($this->providerId);
+        $this->provider = $this->getProviderInstance($identity['providerId']);
 
-        return $this->provider->requestThumbnail($id);
+        return $this->provider->requestThumbnail($identity['videoId']);
     }
 }
