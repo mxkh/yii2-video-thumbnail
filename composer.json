@@ -6,7 +6,7 @@
   "require": {
     "php": ">=5.4.0",
     "yiisoft/yii2": ">=2.0.6",
-    "mxkh/url-finder": "^0.1.4"
+    "mxkh/url-finder": "^0.1.8"
   },
   "autoload": {
     "psr-4": {
